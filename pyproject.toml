@@ -1,0 +1,6 @@
+[project]
+name = "bvapp-didatico"
+version = "0.1.0"
+description = "Cenários de teste do BVapp (atividade N3)"
+requires-python = ">=3.12"
+dependencies = ["django>=5.2"]
