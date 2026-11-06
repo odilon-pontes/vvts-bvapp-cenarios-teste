@@ -39,7 +39,6 @@ Features sob responsabilidade: 23834, 23851, 23853 e 23860 (20 CAs, excluindo o 
 | UC007 | Controlar acesso à consulta de injeção de energia por perfil | `functional_tests/test_uc007_acesso_consulta_injecao.py` |
 | UC008 | Excluir injeção de energia mensal com confirmação e motivo | `functional_tests/test_uc008_excluir_injecao_confirmacao_motivo.py` |
 | UC009 | Restringir a exclusão de injeção de energia ao Gestor/Administrador | `functional_tests/test_uc009_restringir_exclusao_gestor.py` |
-| UC010 | Registrar auditoria na exclusão de injeção de energia | `functional_tests/test_uc010_auditoria_exclusao_injecao.py` |
-| UC011 | Comparar geração dos inversores e injeção da fatura | `functional_tests/test_uc011_comparar_geracao_injecao.py` |
-| UC012 | Sinalizar divergência acima da tolerância | `functional_tests/test_uc012_sinalizar_divergencia.py` |
-| UC013 | Informar ausência de dados de inversores na comparação | `functional_tests/test_uc013_comparacao_sem_dados_inversores.py` |
+| UC010 | Comparar geração dos inversores e injeção da fatura | `functional_tests/test_uc010_comparar_geracao_injecao.py` |
+| UC011 | Sinalizar divergência acima da tolerância | `functional_tests/test_uc011_sinalizar_divergencia.py` |
+| UC012 | Informar ausência de dados de inversores na comparação | `functional_tests/test_uc012_comparacao_sem_dados_inversores.py` |

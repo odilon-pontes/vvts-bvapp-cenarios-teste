@@ -18,7 +18,7 @@ Várias dúvidas confirmam problemas já registrados no walkthrough de requisito
 | D10 | 23853 / CA01 24920 | "Gestor/Administrador" é o mesmo perfil de "Gestor" ou são perfis distintos? | UC009 |
 | D11 | 23853 / CA02 24921 | O motivo da exclusão é texto livre? Há tamanho mínimo/máximo? | UC008 |
 | D12 | 23853 / CA02 24921 | O que acontece se o usuário cancelar a confirmação de exclusão? (comportamento não descrito) | UC003, UC008 |
-| D13 | 23853 / CA04 24923 | RF-4.2.05 não foi fornecido: o que o registro de auditoria contém (usuário, data/hora, motivo, fatura?) e onde ele é consultado? (O CA 25778 "log imutável" está Rejected e não será testado.) | UC003, UC010 |
+| D13 | 23853 / CA04 24923 | RF-4.2.05 não foi fornecido: o que o registro de auditoria contém (usuário, data/hora, motivo, fatura?) e onde ele é consultado? (O CA 25778 "log imutável" está Rejected e não será testado.) | UC003 |
 | D14 | 23849 / CA03 25771 | Uma fatura excluída logicamente impede novo cadastro do mesmo mês/ano e usina? | UC003 |
 | D15 | 23860 / CA01 24939 | Qual a fórmula da diferença percentual (base: energia medida ou energia da fatura)? Qual o sinal da diferença absoluta? Qual campo da fatura é comparado (Energia Injetada ou Energia Consumida)? Como o período da fatura é definido? | UC011, UC012 |
 | D16 | 23860 / CA02 24941 | Quem configura o percentual de tolerância, onde, e qual o valor padrão? Divergência "supera" significa > ou >=? | UC012 |

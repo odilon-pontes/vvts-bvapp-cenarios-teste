@@ -34,7 +34,6 @@ Escopo desta entrega: somente documentação dos cenários. Nada foi implementad
 | UC007 | Controlar acesso à consulta de injeção de energia por perfil |
 | UC008 | Excluir injeção de energia mensal com confirmação e motivo |
 | UC009 | Restringir a exclusão de injeção de energia ao Gestor/Administrador |
-| UC010 | Registrar auditoria na exclusão de injeção de energia |
 | UC011 | Comparar geração dos inversores e injeção da fatura |
 | UC012 | Sinalizar divergência acima da tolerância |
 | UC013 | Informar ausência de dados de inversores na comparação |
