@@ -1,93 +1,118 @@
 '''
 UC001 - Consultar histórico de medições
 
-Objetivo: Permitir que o usuário consulte as medições coletadas dos inversores aplicando
-filtros por data de início, data de fim, usina e/ou inversor, com resultados
-paginados.
+Objetivo: Permitir que o usuário autorizado consulte as medições coletadas dos
+inversores filtrando por período obrigatório, usina e inversor, com resultados
+paginados e ordenados do mais recente para o mais antigo.
 
 Requisitos:
 - RF-23834 Consulta histórica de medições (Epic 23761)
-- CA01 (24993) filtros por data de início, data de fim, usina e/ou inversor
+- CA01 (24993) filtros Data de Início, Data de Fim, Usina e Inversor
 - CA02 (24994) resultados paginados com controle de navegação
-- CA04 (24996) mensagem informativa quando não há resultados
+- CA03 (24995) primeira página em até 3 segundos para períodos de até 12 meses
+- CA04 (24996) mensagem quando não há resultados
+- CA06 (36162) listas de Usina e de Inversor
+- CA07 (36163) limites do período e Data de Fim anterior à Data de Início
+- CA08 (36164) colunas e ordenação padrão
+- CA09 (36165) carregamento, ausência de resultados e falha
 - US 24902 - Filtrar e Buscar medições de Inversores (Sprint 03)
 
 Ator:
 - Gestor (também Operador de Usina e Técnico de Manutenção, ver UC002)
 
 Pré-condições:
-- Usuário autenticado com perfil Gestor.
+- Usuário autenticado como Gestor, com acesso às usinas Usina Solar Alfa e
+  Usina Solar Beta.
 - Existem medições coletadas em 03/2026 para a Usina Solar Alfa (INV-01 e
   INV-02) e para a Usina Solar Beta (INV-03).
-- Existem mais medições para INV-01 do que cabem em uma página.
+- Existem mais medições de INV-01 em 03/2026 do que cabem em uma página.
+- Existe medição de INV-01 em 31/03/2026 às 23h45min e em 01/04/2026 às
+  00h00min.
 
 Dados de teste:
-- Data de início: 01/03/2026 | Data de fim: 31/03/2026
+- Data de Início: 01/03/2026 | Data de Fim: 31/03/2026
 - Usina: Usina Solar Alfa | Inversor: INV-01
 - Período sem medições (negativo): 01/01/2020 a 31/01/2020
+- Datas invertidas: Data de Início 31/03/2026 e Data de Fim 01/03/2026
 
 Resultado esperado (resumo):
-Somente medições que atendem a todos os filtros informados são listadas, de
-forma paginada; sem resultados, o sistema exibe mensagem informativa.
+Somente as medições que atendem a todos os filtros são listadas, de forma
+paginada e da mais recente para a mais antiga; sem resultados ou com falha, o
+sistema exibe a mensagem definida.
 
-Autor:  Odilon Francelino de Pontes Neto
+Versão dos requisitos: Work packages de 12/11/2026
+Autor: Odilon Francelino de Pontes Neto
 
 Dúvidas para os stakeholders:
-[D01] Algum filtro é obrigatório? O que acontece sem nenhum filtro e quando a
-      data de fim é anterior à data de início?
-[D02] Quantos itens por página a listagem de medições deve exibir?
-[D03] Qual o texto exato da mensagem quando nenhuma medição é encontrada?
-      ("clara" é subjetivo)
-[D04] RNF-02 não foi fornecido. Sob quais condições (volume de registros,
-      usuários simultâneos, ambiente) vale o limite de 3 s? Qual o
+[D01] As Datas de Início e de Fim são obrigatórias, mas o requisito não diz o
+      que o sistema faz (mensagem, destaque do campo) quando a consulta é
+      acionada sem uma delas.
+[D02] Quantos registros por página a listagem de medições exibe por padrão, e
+      o usuário pode alterar essa quantidade?
+[D03] Sob quais condições de carga (volume de registros, usuários simultâneos,
+      ambiente) vale o limite de 3 s? O RNF-02 não foi fornecido. Qual o
       comportamento para períodos acima de 12 meses?
+[D05] Qual a grandeza e a unidade do "valor medido" exibido em cada medição
+      (kW, kWh)?
+[D17] Como é indicado o carregamento em andamento (texto, ícone)? Qual o texto
+      da mensagem de falha na comparação geração x injeção (CA14 36180 não
+      define)?
 '''
 
-
-# [FP] - FLUXO PRINCIPAL
+# 🟢 [FP] - FLUXO PRINCIPAL
 # ---------------------------------------------------------------
 
 # O ator acessa a página de consulta histórica de medições. Ele verifica que
 # existem os campos de filtro:
-# - Data de início
-# - Data de fim
+# - Data de Início
+# - Data de Fim
 # - Usina
 # - Inversor
 # - Opção para aplicar os filtros
 
-# O ator preenche a data de início com 01/03/2026 e a data de fim com
-# 31/03/2026, seleciona a usina "Usina Solar Alfa" e o inversor "INV-01".
-# [A1][A2][A5]
+# O ator verifica que o campo Usina lista, em ordem alfabética, apenas as
+# usinas às quais ele tem acesso: Usina Solar Alfa e Usina Solar Beta. [A7]
 
-# O ator seleciona a opção para aplicar os filtros. [A3][A4][A6] [RN1]
+# O ator preenche a Data de Início com 01/03/2026 e a Data de Fim com
+# 31/03/2026 e seleciona a Usina Solar Alfa. [A1][A2][A5][A6][A8]
 
-# O sistema exibe a lista de medições correspondentes aos filtros.
+# O sistema passa a listar no campo Inversor apenas os inversores da Usina
+# Solar Alfa: INV-01 e INV-02. O ator seleciona INV-01. [RN3]
 
-# O ator verifica que cada linha exibe timestamp, inversor, usina e valor
-# (colunas citadas no CA02 de 25103) e que todas as linhas são do inversor
-# INV-01, da Usina Solar Alfa, com timestamp entre 01/03/2026 e 31/03/2026.
+# O ator seleciona a opção para aplicar os filtros. [A3][A4][A9] [RN1][RN2]
+
+# O sistema indica o carregamento em andamento [D17] e exibe a lista de
+# medições correspondentes aos filtros.
+
+# O ator verifica que cada linha exibe o timestamp da medição (data e hora),
+# o Inversor, a Usina e o valor medido com sua unidade [D05], e que todas as
+# linhas são do inversor INV-01, da Usina Solar Alfa, com timestamp entre
+# 01/03/2026 e 31/03/2026.
+
+# O ator verifica que a lista está ordenada pelo timestamp em ordem
+# decrescente, da medição mais recente para a mais antiga.
 
 # O ator verifica que nenhuma medição de outro inversor ou de outro período
 # está na lista.
 
-# [A1] - FILTRAR SOMENTE POR USINA
+# 🟠 [A1] - FILTRAR POR PERÍODO E USINA, SEM INVERSOR
 # ---------------------------------------------------------------
 
-# O ator preenche apenas a usina "Usina Solar Alfa" e aplica os filtros.
+# O ator preenche o período e a Usina Solar Alfa, sem selecionar inversor, e
+# aplica os filtros.
 
-# O sistema exibe medições de INV-01 e INV-02 (todos os inversores da usina)
-# e nenhuma medição de INV-03.
+# O sistema exibe medições de INV-01 e INV-02 e nenhuma medição de INV-03.
 
-# [A2] - FILTRAR SOMENTE POR PERÍODO
+# 🟠 [A2] - FILTRAR SOMENTE POR PERÍODO
 # ---------------------------------------------------------------
 
-# O ator preenche apenas data de início 01/03/2026 e data de fim 31/03/2026
-# e aplica os filtros.
+# O ator preenche somente a Data de Início e a Data de Fim, sem usina nem
+# inversor, e aplica os filtros.
 
-# O sistema exibe medições de todas as usinas e inversores dentro do
-# período.
+# O sistema exibe medições de todas as usinas e inversores às quais o ator
+# tem acesso, dentro do período.
 
-# [A3] - NAVEGAR ENTRE PÁGINAS [CA02]
+# 🟠 [A3] - NAVEGAR ENTRE PÁGINAS [CA02]
 # ---------------------------------------------------------------
 
 # O ator executa o fluxo principal com um filtro que retorna mais registros
@@ -104,43 +129,80 @@ Dúvidas para os stakeholders:
 # O ator retorna à primeira página e verifica que os registros iniciais
 # continuam os mesmos.
 
-# [A4] - NENHUM RESULTADO [CA04]
+# 🟠 [A4] - NENHUM RESULTADO [CA04]
 # ---------------------------------------------------------------
 
 # O ator informa o período de 01/01/2020 a 31/01/2020 e aplica os filtros.
 
-# O sistema exibe uma mensagem informativa de que nenhuma medição foi
-# encontrada [D03] e não exibe linhas de medição.
+# O sistema exibe a mensagem "Nenhuma medição encontrada para os filtros
+# informados." e não exibe linhas de resultado.
 
-# [A5] - DATA DE FIM ANTERIOR À DATA DE INÍCIO
+# 🟠 [A5] - DATA DE FIM ANTERIOR À DATA DE INÍCIO [CA07]
 # ---------------------------------------------------------------
 
-# O ator informa data de início 31/03/2026 e data de fim 01/03/2026 e aplica
-# os filtros.
+# O ator informa Data de Início 31/03/2026 e Data de Fim 01/03/2026 e tenta
+# aplicar os filtros.
 
-# Resultado esperado: NÃO DEFINIDO nos requisitos [D01]. Aguardar
-# esclarecimento antes de fixar o resultado.
+# O sistema não executa a consulta e exibe a mensagem "A Data de Fim não
+# pode ser anterior à Data de Início.".
 
-# [A6] - APLICAR SEM NENHUM FILTRO
+# 🟠 [A6] - LIMITES DO PERÍODO INCLUEM AS DATAS INFORMADAS [CA07]
 # ---------------------------------------------------------------
 
-# O ator aplica os filtros sem preencher nenhum campo.
+# O ator informa Data de Início 01/03/2026 e Data de Fim 31/03/2026,
+# seleciona INV-01 e aplica os filtros.
 
-# Resultado esperado: NÃO DEFINIDO nos requisitos [D01]. Aguardar
-# esclarecimento antes de fixar o resultado.
+# O sistema exibe a medição de INV-01 de 31/03/2026 às 23h45min.
 
-# [RN1] - COMBINAÇÃO DE FILTROS
+# O sistema não exibe a medição de INV-01 de 01/04/2026 às 00h00min.
+
+# 🟠 [A7] - USUÁRIO COM ACESSO A UMA ÚNICA USINA [CA06]
 # ---------------------------------------------------------------
 
-# O CA01 usa "e/ou": qualquer combinação dos filtros é aceita e o resultado
-# respeita todos os filtros informados (interpretação a confirmar).
+# O ator autentica com um usuário que tem acesso apenas à Usina Solar Alfa e
+# acessa a consulta.
 
-# [RN2] - DESEMPENHO (CA03 24995)
+# O campo Usina lista somente a Usina Solar Alfa e o campo Inversor não
+# oferece INV-03.
+
+# 🟠 [A8] - PERÍODO NÃO INFORMADO [CA01]
 # ---------------------------------------------------------------
 
-# Consultas de até 12 meses devem retornar em até 3 s (RNF-02). Condições de
-# medição e comportamento acima de 12 meses indefinidos [D04]; verificação
-# fica para a etapa de testes não funcionais.
+# O ator preenche somente a Usina Solar Alfa, deixando Data de Início e Data
+# de Fim em branco, e tenta aplicar os filtros.
 
-# ESQUELETO PARA ETAPAS FUTURAS (não implementado nesta atividade)
+# Resultado esperado: o sistema não executa a consulta, pois as datas são
+# obrigatórias. A forma como o sistema informa isso é NÃO DEFINIDA [D01].
+
+# 🟠 [A9] - FALHA NA OBTENÇÃO DA LISTA [CA09]
 # ---------------------------------------------------------------
+
+# O ator aplica os filtros em um momento em que a obtenção das medições
+# falha.
+
+# O sistema exibe a mensagem "Não foi possível obter as medições. Tente
+# novamente.".
+
+# O sistema não informa que não existem medições e não exibe a mensagem de
+# ausência de resultados do A4.
+
+# 🟣 [RN1] - FILTROS
+# ---------------------------------------------------------------
+
+# Data de Início e Data de Fim são obrigatórias; Usina e Inversor são
+# opcionais. A consulta retorna somente as medições que atendem a todos os
+# filtros informados, com os limites do período incluídos.
+
+# 🟣 [RN2] - DESEMPENHO (CA03 24995)
+# ---------------------------------------------------------------
+
+# Consultas com período de até 12 meses exibem a primeira página em até 3
+# segundos, contados do acionamento da consulta. As condições de carga e o
+# comportamento acima de 12 meses não estão definidos [D03]; a verificação
+# fica para testes não funcionais.
+
+# 🟣 [RN3] - LISTAS DEPENDENTES (CA06 36162)
+# ---------------------------------------------------------------
+
+# O campo Usina lista só as usinas acessíveis ao usuário, em ordem
+# alfabética; o campo Inversor lista só os inversores da usina selecionada.

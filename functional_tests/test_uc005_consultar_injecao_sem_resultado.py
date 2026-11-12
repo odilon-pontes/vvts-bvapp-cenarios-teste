@@ -1,13 +1,13 @@
 '''
-UC005 - Consultar injeção de energia mensal sem resultados
+UC005 - Consultar injeção de energia mensal sem resultados ou com falha
 
-Objetivo: Garantir que o sistema exiba mensagem informativa quando nenhuma fatura é
-encontrada para os filtros aplicados.
+Objetivo: Garantir que o sistema exiba mensagem quando nenhuma fatura é encontrada e que
+distinga essa situação de uma falha na obtenção da lista.
 
 Requisitos:
 - RF-23851 Consulta histórica de Injeção de Energia mensal (Epic 23763)
-- CA04 (24917) mensagem informativa quando nenhuma fatura é encontrada
-- CA06 (25776) exibir mensagem quando nenhuma fatura for encontrada (duplica o CA04)
+- CA04 (24917) mensagem quando nenhuma fatura é encontrada
+- CA07 (36166) carregamento, ausência de resultados e falha na obtenção da lista
 
 Ator:
 - Gestor
@@ -20,42 +20,55 @@ Dados de teste:
 - Mês/Ano: 12/2020 | Usina: Usina Solar Alfa
 
 Resultado esperado (resumo):
-O sistema exibe mensagem informativa e nenhuma linha de fatura.
+Sem resultados, o sistema exibe a mensagem de ausência; em caso de falha,
+exibe a mensagem de falha, sem indicar ausência de faturas.
 
-Autor:  Odilon Francelino de Pontes Neto
+Versão dos requisitos: Work packages de 12/11/2026
+Autor: Odilon Francelino de Pontes Neto
 
 Dúvidas para os stakeholders:
-[D09] Qual o texto da mensagem quando nenhuma fatura é encontrada? Os
-      critérios 24917 e 25776 são duplicados: manter só um?
+[D17] Como é indicado o carregamento em andamento (texto, ícone)? Qual o texto
+      da mensagem de falha na comparação geração x injeção (CA14 36180 não
+      define)?
 '''
 
-# [FP] - FLUXO PRINCIPAL
+# 🟢 [FP] - FLUXO PRINCIPAL
 # ---------------------------------------------------------------
 
 # O ator acessa a consulta histórica de faturas.
 
-# O ator informa o mês/ano 12/2020 e seleciona a usina "Usina Solar Alfa".
-# [A1]
+# O ator informa o Mês/Ano 12/2020 e seleciona a Usina Solar Alfa. [A1]
 
 # O ator aplica os filtros.
 
-# O sistema exibe uma mensagem informativa de que nenhuma fatura foi
-# encontrada [D09].
+# O sistema indica o carregamento em andamento [D17] e exibe a mensagem
+# "Nenhuma fatura encontrada para os filtros informados.".
 
 # O ator verifica que nenhuma linha de fatura é exibida.
 
-# [A1] - SEM RESULTADO SOMENTE COM FILTRO DE USINA
+# 🟠 [A1] - SEM RESULTADO SOMENTE COM FILTRO DE USINA
 # ---------------------------------------------------------------
 
 # O ator seleciona uma usina sem nenhuma fatura cadastrada.
 
-# O sistema exibe a mesma mensagem informativa [D09].
+# O sistema exibe a mesma mensagem "Nenhuma fatura encontrada para os
+# filtros informados.".
 
-# [RN1] - CRITÉRIOS DUPLICADOS
+# 🟠 [A2] - FALHA NA OBTENÇÃO DA LISTA [CA07 36166]
 # ---------------------------------------------------------------
 
-# Os CAs 24917 e 25776 descrevem o mesmo comportamento; um único cenário os
-# cobre [D09].
+# O ator aplica os filtros em um momento em que a obtenção das faturas
+# falha.
 
-# ESQUELETO PARA ETAPAS FUTURAS (não implementado nesta atividade)
+# O sistema exibe a mensagem "Não foi possível obter as faturas. Tente
+# novamente.".
+
+# O sistema não informa que não existem faturas e não exibe a mensagem do
+# fluxo principal.
+
+# 🟣 [RN1] - ESTADOS DISTINTOS
 # ---------------------------------------------------------------
+
+# A consulta distingue o carregamento em andamento, a ausência de resultados
+# (CA04) e a falha na obtenção da lista (CA07). A falha nunca é apresentada
+# como ausência de faturas.

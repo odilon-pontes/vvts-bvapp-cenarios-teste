@@ -2,11 +2,12 @@
 UC002 - Controlar acesso à consulta histórica de medições por perfil
 
 Objetivo: Garantir que os perfis Gestor, Operador de Usina e Técnico de Manutenção
-acessem a consulta histórica de medições.
+acessem a consulta histórica de medições e que os demais perfis não a
+visualizem nem a acessem diretamente.
 
 Requisitos:
 - RF-23834 Consulta histórica de medições (Epic 23761)
-- CA05 (24997) acesso dos perfis Gestor, Operador de Usina e Técnico de Manutenção
+- CA05 (24997) perfis com acesso; demais perfis não visualizam e têm o acesso direto recusado
 
 Ator:
 - Gestor
@@ -21,61 +22,67 @@ Pré-condições:
 Dados de teste:
 - Um usuário por perfil: Gestor, Operador de Usina, Técnico de Manutenção,
   Tesoureiro.
+- Filtro: Usina Solar Alfa, de 01/03/2026 a 31/03/2026.
 
 Resultado esperado (resumo):
-Os três perfis autorizados acessam a consulta e visualizam os filtros e
-resultados; o perfil não listado tem o comportamento definido após
-esclarecimento.
+Os três perfis autorizados acessam a consulta e visualizam as medições; o
+Tesoureiro não vê a funcionalidade e tem o acesso direto recusado.
 
-Autor:  Odilon Francelino de Pontes Neto
+Versão dos requisitos: Work packages de 12/11/2026
+Autor: Odilon Francelino de Pontes Neto
 
 Dúvidas para os stakeholders:
-[D05] Os perfis não listados nos critérios (ex.: Tesoureiro na consulta de
-      medições; Técnico de Manutenção na consulta de faturas) devem ter o
-      acesso negado? De que forma (menu oculto, mensagem, redirecionamento)? E
-      o usuário não autenticado?
+[D04] Como o sistema recusa o acesso direto de um perfil não autorizado
+      (mensagem, redirecionamento)? O que acontece com o usuário não
+      autenticado? Os critérios só dizem que é "recusado".
 '''
 
-
-# [FP] - FLUXO PRINCIPAL
+# 🟢 [FP] - FLUXO PRINCIPAL
 # ---------------------------------------------------------------
 
-# O ator, autenticado como Gestor, acessa o menu e seleciona a consulta
-# histórica de medições.
+# O ator, autenticado como Gestor, verifica que o menu exibe a consulta
+# histórica de medições e a seleciona.
 
 # O sistema exibe a página de consulta histórica de medições com os campos
 # de filtro.
 
-# O ator aplica o filtro por usina "Usina Solar Alfa". [RN1]
+# O ator aplica o período de 01/03/2026 a 31/03/2026 e a Usina Solar Alfa.
+# [RN1]
 
 # O sistema exibe as medições da usina.
 
-# [A1] - ACESSO COMO OPERADOR DE USINA
+# 🟠 [A1] - ACESSO COMO OPERADOR DE USINA
 # ---------------------------------------------------------------
 
 # O ator autentica como Operador de Usina e executa o fluxo principal.
 
 # O sistema permite o acesso e exibe os mesmos resultados.
 
-# [A2] - ACESSO COMO TÉCNICO DE MANUTENÇÃO
+# 🟠 [A2] - ACESSO COMO TÉCNICO DE MANUTENÇÃO
 # ---------------------------------------------------------------
 
 # O ator autentica como Técnico de Manutenção e executa o fluxo principal.
 
 # O sistema permite o acesso e exibe os mesmos resultados.
 
-# [A3] - ACESSO COMO TESOUREIRO
+# 🟠 [A3] - MENU DO TESOUREIRO
 # ---------------------------------------------------------------
 
-# O ator autentica como Tesoureiro e tenta acessar a consulta de medições.
+# O ator autentica como Tesoureiro e examina o menu.
 
-# Resultado esperado: NÃO DEFINIDO nos requisitos [D05]. Os critérios só
-# listam os três perfis autorizados e não dizem como o acesso é negado.
+# O sistema não exibe a consulta histórica de medições no menu.
 
-# [RN1] - PERFIS AUTORIZADOS
+# 🟠 [A4] - ACESSO DIRETO PELO TESOUREIRO
 # ---------------------------------------------------------------
 
-# Têm acesso: Gestor, Operador de Usina e Técnico de Manutenção.
+# O ator, autenticado como Tesoureiro, tenta abrir diretamente o endereço da
+# consulta histórica de medições.
 
-# ESQUELETO PARA ETAPAS FUTURAS (não implementado nesta atividade)
+# O sistema recusa o acesso e não exibe medições. A forma da recusa é NÃO
+# DEFINIDA [D04].
+
+# 🟣 [RN1] - PERFIS AUTORIZADOS
 # ---------------------------------------------------------------
+
+# Têm acesso: Gestor, Operador de Usina e Técnico de Manutenção. Os demais
+# perfis não visualizam a funcionalidade e têm o acesso direto recusado.

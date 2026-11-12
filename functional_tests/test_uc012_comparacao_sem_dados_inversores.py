@@ -1,68 +1,90 @@
 '''
-UC013 - Informar ausência de dados de inversores na comparação
+UC012 - Informar ausência de dados de inversores na comparação
 
-Objetivo: Informar explicitamente a ausência de dados de inversores para o período da
-fatura, sem calcular divergência.
+Objetivo: Informar a ausência de leituras válidas de inversores para a Usina e o Mês/Ano
+da fatura, sem calcular diferenças nem sinalizar divergência, e tratar Energia
+Medida igual a zero.
 
 Requisitos:
 - RF-23860 Comparação geração x injeção (Epic 23763)
-- CA04 (24943) informar a ausência de dados, sem calcular divergência
-- CA05 (28866) informar ausência de dados de inversores (duplica o CA04)
+- CA04 (24943) ausência de leituras válidas
+- CA09 (36175) Energia Medida igual a zero
 
 Ator:
-- Gestor (perfis com acesso indefinidos [D20])
+- Gestor/Administrador
+- Tesoureiro
 
 Pré-condições:
-- Usuário autenticado como Gestor.
-- Fatura ativa 06/2026 Alfa com 1.100,00 kWh informados.
-- Não existem medições de inversores da Usina Solar Alfa em 06/2026.
+- Usuário autenticado como Gestor/Administrador.
+- Fatura ativa 06/2026 Alfa com Energia Injetada 1.100,00 kWh.
+- Não existem leituras válidas de inversores da Usina Solar Alfa em 06/2026.
+- Para o A1, fatura ativa 07/2026 Alfa com leituras válidas somando 0,00 kWh.
 
 Dados de teste:
-- Fatura: 06/2026 | Usina Solar Alfa | Energia informada 1.100,00 kWh
-- Medições em 06/2026: nenhuma
+- Fatura: 06/2026 | Usina Solar Alfa | Energia Injetada 1.100,00 kWh
+- Leituras válidas em 06/2026: nenhuma
+- Fatura do A1: 07/2026 | Energia Medida 0,00 kWh
 
 Resultado esperado (resumo):
-O sistema informa a ausência de dados e não exibe divergência, nem diferenças
-calculadas, nem sinalização de inconsistência.
+Sem leituras válidas, o sistema exibe a mensagem de ausência e não calcula
+diferenças nem sinaliza divergência; com Energia Medida igual a zero, exibe
+"Não calculável" no percentual.
 
-Autor:  Odilon Francelino de Pontes Neto
+Versão dos requisitos: Work packages de 12/11/2026
+Autor: Odilon Francelino de Pontes Neto
 
 Dúvidas para os stakeholders:
-[D18] Se só parte do período da fatura tem dados de inversores, a divergência
-      é calculada? (Os critérios 24943 e 28866 são duplicados.)
-[D20] Quais perfis têm acesso à comparação geração x injeção? (a feature não
-      define)
+[D15] Quando há leituras em apenas parte do mês, o sistema calcula a
+      comparação com as leituras existentes ou avisa a cobertura parcial?
+      Quando a Energia Medida é zero e a Energia Injetada é maior que zero, a
+      fatura é sinalizada?
 '''
 
-
-# [FP] - FLUXO PRINCIPAL
+# 🟢 [FP] - FLUXO PRINCIPAL
 # ---------------------------------------------------------------
 
 # O ator acessa a página de comparação geração x injeção.
 
 # O ator localiza a fatura 06/2026 da Usina Solar Alfa.
 
-# O sistema informa explicitamente que não há dados de inversores para o
-# período da fatura (texto não definido).
+# O sistema exibe a mensagem "Sem dados de inversores para o período da
+# fatura.".
 
-# O ator verifica que a diferença absoluta e a diferença percentual não são
+# O ator verifica que a Diferença Absoluta e a Diferença Percentual não são
 # calculadas (não exibem valor numérico, nem zero).
 
-# O ator verifica que a fatura não recebe a sinalização de inconsistência
-# (UC012). [A1]
+# O ator verifica que a fatura não recebe o ícone de alerta nem o rótulo
+# "Divergente". [A1][A2]
 
-# [A1] - DADOS PARCIAIS NO PERÍODO
+# 🟠 [A1] - ENERGIA MEDIDA IGUAL A ZERO [CA09 36175]
 # ---------------------------------------------------------------
 
-# Existem medições só em parte de 06/2026 (ex.: primeiros 10 dias).
+# O ator localiza a fatura 07/2026 da Usina Solar Alfa, cuja Energia Medida
+# é 0,00 kWh.
 
-# Resultado esperado: NÃO DEFINIDO [D18].
+# O sistema exibe a Diferença Percentual como "Não calculável", sem exibir
+# erro nem valor infinito.
 
-# [RN1] - CRITÉRIOS DUPLICADOS
+# Se a fatura deve ser sinalizada quando a Energia Injetada é maior que zero
+# é NÃO DEFINIDO [D15].
+
+# 🟠 [A2] - DADOS PARCIAIS NO PERÍODO
 # ---------------------------------------------------------------
 
-# Os CAs 24943 e 28866 descrevem o mesmo comportamento; um único cenário os
-# cobre [D18].
+# Existem leituras válidas apenas nos primeiros 10 dias de 06/2026.
 
-# ESQUELETO PARA ETAPAS FUTURAS (não implementado nesta atividade)
+# Resultado esperado: NÃO DEFINIDO [D15]. Pela regra da Energia Medida, a
+# soma usaria as leituras existentes, mas o requisito não trata cobertura
+# parcial.
+
+# 🟣 [RN1] - AUSÊNCIA DE LEITURAS VÁLIDAS
 # ---------------------------------------------------------------
+
+# Sem leituras válidas para a Usina e o Mês/Ano da fatura, o sistema exibe a
+# mensagem, não calcula as diferenças e não sinaliza divergência.
+
+# 🟣 [RN2] - DIVISÃO POR ZERO
+# ---------------------------------------------------------------
+
+# Com Energia Medida igual a zero, a Diferença Percentual não é calculada e
+# exibe "Não calculável".
