@@ -11,7 +11,7 @@ Mini projeto individual de organização de cenários de teste do BVapp (ativida
 bvapp-didatico/
 ├── pyproject.toml, manage.py     # configuração (uv) e entrada do Django
 ├── config/                       # configuração global do projeto Django
-├── functional_tests/             # um arquivo por cenário (UC001 a UC013)
+├── functional_tests/             # um arquivo por cenário (UC001 a UC011)
 └── docs/
     ├── rastreabilidade.md        # critérios de aceitação x cenários
     └── duvidas_stakeholders.md   # regras ausentes ou contraditórias
