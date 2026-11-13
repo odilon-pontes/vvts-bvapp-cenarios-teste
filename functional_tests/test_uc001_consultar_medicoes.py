@@ -40,23 +40,7 @@ Somente as medições que atendem a todos os filtros são listadas, de forma
 paginada e da mais recente para a mais antiga; sem resultados ou com falha, o
 sistema exibe a mensagem definida.
 
-Versão dos requisitos: Work packages de 12/11/2026
 Autor: Odilon Francelino de Pontes Neto
-
-Dúvidas para os stakeholders:
-[D01] As Datas de Início e de Fim são obrigatórias, mas o requisito não diz o
-      que o sistema faz (mensagem, destaque do campo) quando a consulta é
-      acionada sem uma delas.
-[D02] Quantos registros por página a listagem de medições exibe por padrão, e
-      o usuário pode alterar essa quantidade?
-[D03] Sob quais condições de carga (volume de registros, usuários simultâneos,
-      ambiente) vale o limite de 3 s? O RNF-02 não foi fornecido. Qual o
-      comportamento para períodos acima de 12 meses?
-[D05] Qual a grandeza e a unidade do "valor medido" exibido em cada medição
-      (kW, kWh)?
-[D17] Como é indicado o carregamento em andamento (texto, ícone)? Qual o texto
-      da mensagem de falha na comparação geração x injeção (CA14 36180 não
-      define)?
 '''
 
 # 🟢 [FP] - FLUXO PRINCIPAL
@@ -68,6 +52,7 @@ Dúvidas para os stakeholders:
 # - Data de Fim
 # - Usina
 # - Inversor
+# - Nível Severidade
 # - Opção para aplicar os filtros
 
 # O ator verifica que o campo Usina lista, em ordem alfabética, apenas as
@@ -81,11 +66,11 @@ Dúvidas para os stakeholders:
 
 # O ator seleciona a opção para aplicar os filtros. [A3][A4][A9] [RN1][RN2]
 
-# O sistema indica o carregamento em andamento [D17] e exibe a lista de
+# O sistema indica o carregamento em andamento e exibe a lista de
 # medições correspondentes aos filtros.
 
 # O ator verifica que cada linha exibe o timestamp da medição (data e hora),
-# o Inversor, a Usina e o valor medido com sua unidade [D05], e que todas as
+# o Inversor, a Usina e o valor medido (kWh), e que todas as
 # linhas são do inversor INV-01, da Usina Solar Alfa, com timestamp entre
 # 01/03/2026 e 31/03/2026.
 
@@ -116,7 +101,7 @@ Dúvidas para os stakeholders:
 # ---------------------------------------------------------------
 
 # O ator executa o fluxo principal com um filtro que retorna mais registros
-# do que cabem em uma página [D02].
+# do que cabem em uma página.
 
 # O sistema exibe a primeira página e um controle de navegação entre
 # páginas.
@@ -172,7 +157,8 @@ Dúvidas para os stakeholders:
 # de Fim em branco, e tenta aplicar os filtros.
 
 # Resultado esperado: o sistema não executa a consulta, pois as datas são
-# obrigatórias. A forma como o sistema informa isso é NÃO DEFINIDA [D01].
+# obrigatórias. A forma como o sistema informa é exibindo a mensagem 
+# "Data de início e Data de fim são obrigatórios.".
 
 # 🟠 [A9] - FALHA NA OBTENÇÃO DA LISTA [CA09]
 # ---------------------------------------------------------------
@@ -198,7 +184,7 @@ Dúvidas para os stakeholders:
 
 # Consultas com período de até 12 meses exibem a primeira página em até 3
 # segundos, contados do acionamento da consulta. As condições de carga e o
-# comportamento acima de 12 meses não estão definidos [D03]; a verificação
+# comportamento acima de 12 meses não estão definidos; a verificação
 # fica para testes não funcionais.
 
 # 🟣 [RN3] - LISTAS DEPENDENTES (CA06 36162)

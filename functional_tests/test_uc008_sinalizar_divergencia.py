@@ -1,5 +1,5 @@
 '''
-UC011 - Sinalizar divergência acima da tolerância
+UC008 - Sinalizar divergência acima da tolerância
 
 Objetivo: Sinalizar visualmente a inconsistência quando a Diferença Percentual é maior
 que o percentual de tolerância configurado, e não sinalizar enquanto a
@@ -12,12 +12,12 @@ Requisitos:
 - RF-36181 Configuração do percentual de tolerância de divergência (apoio)
 
 Ator:
-- Gestor/Administrador
+- Gestor
 - Tesoureiro
 
 Pré-condições:
-- Usuário autenticado como Gestor/Administrador [D10].
-- Tolerância configurada em 5% conforme o UC015 (valor apenas de teste).
+- Usuário autenticado como Gestor.
+- Tolerância configurada em 5% conforme o UC011 (valor apenas de teste).
 - Fatura A: 03/2026 Alfa, Energia Medida 1.200,00 kWh e Energia Injetada
   1.230,00 kWh.
 - Fatura B: 04/2026 Alfa, Energia Medida 1.000,00 kWh e Energia Injetada
@@ -35,15 +35,9 @@ Somente a fatura com Diferença Percentual maior que a tolerância recebe o
 ícone de alerta e o rótulo "Divergente"; as demais exibem "Dentro da
 tolerância".
 
-Versão dos requisitos: Work packages de 12/11/2026
 Autor: Odilon Francelino de Pontes Neto
 
 Dúvidas para os stakeholders:
-[D10] "Gestor/Administrador" é o mesmo perfil de "Gestor" (usado nas Features
-      23834 e 23851) ou são perfis distintos?
-[D16] Existe valor padrão para o percentual de tolerância e em que menu fica a
-      configuração? Enquanto não configurado, as linhas exibem o rótulo
-      "Dentro da tolerância"?
 '''
 
 # 🟢 [FP] - FLUXO PRINCIPAL
@@ -69,7 +63,7 @@ Dúvidas para os stakeholders:
 # 🟠 [A2] - ALTERAÇÃO DA TOLERÂNCIA
 # ---------------------------------------------------------------
 
-# O Gestor/Administrador altera a tolerância para 1% (UC015).
+# O Gestor altera a tolerância para 1% (UC011).
 
 # O ator reabre a comparação.
 
@@ -79,7 +73,7 @@ Dúvidas para os stakeholders:
 # 🟠 [A3] - TOLERÂNCIA NÃO CONFIGURADA [CA10 36176]
 # ---------------------------------------------------------------
 
-# Nenhum percentual de tolerância foi configurado [D16].
+# Nenhum percentual de tolerância foi configurado.
 
 # O ator acessa a comparação.
 
@@ -98,5 +92,5 @@ Dúvidas para os stakeholders:
 # 🟣 [RN2] - TOLERÂNCIA
 # ---------------------------------------------------------------
 
-# Valor único, configurado pelo Gestor/Administrador (UC015). Não há valor
-# padrão definido nos requisitos [D16].
+# Valor único, configurado pelo Gestor (UC011). Não há valor
+# padrão definido nos requisitos.

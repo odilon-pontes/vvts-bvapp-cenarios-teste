@@ -1,7 +1,7 @@
 '''
-UC008 - Excluir injeção de energia mensal com confirmação e motivo
+UC005 - Excluir injeção de energia mensal com confirmação e motivo
 
-Objetivo: Permitir que o Gestor/Administrador exclua logicamente uma fatura, informando
+Objetivo: Permitir que o Gestor exclua logicamente uma fatura, informando
 o motivo e confirmando a operação, e impedir a exclusão de fatura já Excluída
 ou inexistente.
 
@@ -15,13 +15,13 @@ Requisitos:
 - US 24960 - Excluir Injeção de Energia mensal (Sprint 04)
 
 Ator:
-- Gestor/Administrador
+- Gestor
 
 Pré-condições:
 - Usuário autenticado como Gestor.
 - Fatura ativa 04/2026 da Usina Solar Alfa, já cadastrada (pré-condição de
   dados; o cadastro está no UC003).
-- Fatura 05/2026 da Usina Solar Alfa com status Excluída (para o A4).
+- Fatura 05/2026 da Usina Solar Alfa com status Excluída (para o A3).
 
 Dados de teste:
 - Fatura: 04/2026 | Usina Solar Alfa
@@ -31,12 +31,7 @@ Resultado esperado (resumo):
 Só com motivo e confirmação a exclusão é efetivada; o registro continua no
 banco com a flag "excluída" e o sistema exibe a mensagem de sucesso.
 
-Versão dos requisitos: Work packages de 12/11/2026
 Autor: Odilon Francelino de Pontes Neto
-
-Dúvidas para os stakeholders:
-[D08] O motivo da exclusão é texto livre? Há tamanho mínimo e máximo? Qual a
-      mensagem exibida quando o motivo não é informado?
 '''
 
 # 🟢 [FP] - FLUXO PRINCIPAL
@@ -71,7 +66,7 @@ Dúvidas para os stakeholders:
 
 # O ator seleciona "Excluir" e confirma sem preencher o motivo.
 
-# O sistema não efetiva a exclusão. A mensagem é NÃO DEFINIDA [D08].
+# O sistema não efetiva a exclusão. Exibe a mensagem "Motivo não pode ser vazio".
 
 # A fatura continua na listagem padrão com status Ativa.
 
@@ -83,14 +78,7 @@ Dúvidas para os stakeholders:
 # O sistema não exclui a fatura, que permanece com o status Ativa e continua
 # na listagem padrão.
 
-# 🟠 [A3] - MOTIVO FORA DO FORMATO
-# ---------------------------------------------------------------
-
-# O ator informa um motivo muito curto (1 caractere) ou muito longo.
-
-# Resultado esperado: NÃO DEFINIDO [D08].
-
-# 🟠 [A4] - FATURA JÁ EXCLUÍDA OU INEXISTENTE [CA08 36171]
+# 🟠 [A3] - FATURA JÁ EXCLUÍDA OU INEXISTENTE [CA08 36171]
 # ---------------------------------------------------------------
 
 # O ator ativa o filtro "Exibir faturas excluídas" e localiza a fatura
@@ -106,8 +94,7 @@ Dúvidas para os stakeholders:
 # 🟣 [RN1] - MOTIVO OBRIGATÓRIO
 # ---------------------------------------------------------------
 
-# A exclusão exige confirmação e motivo preenchido antes de ser efetivada. O
-# formato do motivo não está definido [D08].
+# A exclusão exige confirmação e motivo preenchido antes de ser efetivada.
 
 # 🟣 [RN2] - EXCLUSÃO LÓGICA
 # ---------------------------------------------------------------

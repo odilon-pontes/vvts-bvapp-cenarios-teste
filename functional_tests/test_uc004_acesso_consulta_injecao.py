@@ -1,5 +1,5 @@
 '''
-UC007 - Controlar acesso à consulta de injeção de energia por perfil
+UC004 - Controlar acesso à consulta de injeção de energia por perfil
 
 Objetivo: Garantir que os perfis Gestor, Tesoureiro e Operador de Usina acessem a
 consulta histórica de faturas e que os demais perfis não a visualizem nem a
@@ -27,13 +27,7 @@ Resultado esperado (resumo):
 Os três perfis autorizados acessam a consulta e visualizam as faturas; o
 Técnico de Manutenção não vê a funcionalidade e tem o acesso direto recusado.
 
-Versão dos requisitos: Work packages de 12/11/2026
 Autor: Odilon Francelino de Pontes Neto
-
-Dúvidas para os stakeholders:
-[D04] Como o sistema recusa o acesso direto de um perfil não autorizado
-      (mensagem, redirecionamento)? O que acontece com o usuário não
-      autenticado? Os critérios só dizem que é "recusado".
 '''
 
 # 🟢 [FP] - FLUXO PRINCIPAL
@@ -75,8 +69,7 @@ Dúvidas para os stakeholders:
 # O ator, autenticado como Técnico de Manutenção, tenta abrir diretamente o
 # endereço da consulta histórica de faturas.
 
-# O sistema recusa o acesso e não exibe faturas. A forma da recusa é NÃO
-# DEFINIDA [D04].
+# O sistema recusa o acesso e não exibe faturas.
 
 # 🟣 [RN1] - PERFIS AUTORIZADOS
 # ---------------------------------------------------------------

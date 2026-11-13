@@ -1,5 +1,5 @@
 '''
-UC010 - Comparar geração dos inversores e injeção da fatura
+UC007 - Comparar geração dos inversores e injeção da fatura
 
 Objetivo: Exibir, para cada fatura ativa, a Energia Medida pelos inversores, a Energia
 Injetada informada na fatura, a Diferença Absoluta e a Diferença Percentual,
@@ -19,11 +19,11 @@ Requisitos:
 - US 24978 - Comparar geração e injeção de energia com sinalização de divergência (Sprint 05)
 
 Ator:
-- Gestor/Administrador
+- Gestor
 - Tesoureiro
 
 Pré-condições:
-- Usuário autenticado como Gestor/Administrador.
+- Usuário autenticado como Gestor.
 - Fatura ativa 03/2026 Alfa com Energia Injetada 1.230,00 kWh, Energia
   Consumida 980,00 kWh e Créditos de Energia 270,00 kWh.
 - Inversores da Usina Solar Alfa com 1.200,00 kWh de leituras válidas em
@@ -32,8 +32,7 @@ Pré-condições:
 Dados de teste:
 - Energia Medida: 1.200,00 kWh | Energia Injetada: 1.230,00 kWh
 - Diferença Absoluta: |1.230,00 - 1.200,00| = 30,00 kWh
-- Diferença Percentual: 30,00 / 1.200,00 x 100 = 2,5% (casas decimais conforme
-  [D13])
+- Diferença Percentual: 30,00 / 1.200,00 x 100 = 2,5% (casas decimais conforme)
 - A1: mais 100,00 kWh de leituras sinalizadas como inválidas em 03/2026
 - A4: leitura de 50,00 kWh em 01/04/2026 às 00h00min e leitura em 31/03/2026
   às 23h59min59s
@@ -44,21 +43,7 @@ A linha de cada fatura exibe os quatro valores corretos, calculados com a
 Energia Injetada e as leituras válidas do mês da fatura; faturas Excluídas não
 aparecem.
 
-Versão dos requisitos: Work packages de 12/11/2026
 Autor: Odilon Francelino de Pontes Neto
-
-Dúvidas para os stakeholders:
-[D04] Como o sistema recusa o acesso direto de um perfil não autorizado
-      (mensagem, redirecionamento)? O que acontece com o usuário não
-      autenticado? Os critérios só dizem que é "recusado".
-[D10] "Gestor/Administrador" é o mesmo perfil de "Gestor" (usado nas Features
-      23834 e 23851) ou são perfis distintos?
-[D13] Quantas casas decimais e qual arredondamento são usados na Diferença
-      Absoluta e na Diferença Percentual?
-[D14] Como uma leitura de inversor passa a ser "inválida" e quem a sinaliza?
-[D17] Como é indicado o carregamento em andamento (texto, ícone)? Qual o texto
-      da mensagem de falha na comparação geração x injeção (CA14 36180 não
-      define)?
 '''
 
 # 🟢 [FP] - FLUXO PRINCIPAL
@@ -75,13 +60,12 @@ Dúvidas para os stakeholders:
 # - Energia Medida: 1.200,00 kWh
 # - Energia Injetada: 1.230,00 kWh
 # - Diferença Absoluta: 30,00 kWh
-# - Diferença Percentual: 2,5% [D13]. [A1][A4][A5] [RN1]
+# - Diferença Percentual: 2,5%. [A1][A4][A5] [RN1]
 
 # 🟠 [A1] - LEITURAS INVÁLIDAS IGNORADAS [CA03 24942]
 # ---------------------------------------------------------------
 
-# Existem 100,00 kWh de leituras sinalizadas como inválidas em 03/2026
-# [D14].
+# Existem 100,00 kWh de leituras sinalizadas como inválidas em 03/2026.
 
 # O ator abre a comparação da fatura 03/2026 Alfa.
 
@@ -144,7 +128,7 @@ Dúvidas para os stakeholders:
 # O ator acessa a comparação em um momento em que a obtenção dos dados
 # falha.
 
-# O sistema exibe a falha, com texto NÃO DEFINIDO [D17], e não exibe a
+# O sistema exibe a falha, com texto "Falha na obtenção dos dados", e não exibe a
 # mensagem "Nenhuma fatura cadastrada para comparação.".
 
 # 🟠 [A8] - ACESSO COMO TESOUREIRO [CA11 36177]
@@ -163,7 +147,7 @@ Dúvidas para os stakeholders:
 
 # O ator tenta abrir diretamente o endereço da comparação.
 
-# O sistema recusa o acesso. A forma da recusa é NÃO DEFINIDA [D04].
+# O sistema recusa o acesso.
 
 # 🟣 [RN1] - FÓRMULAS (CA06 36172)
 # ---------------------------------------------------------------
@@ -182,4 +166,4 @@ Dúvidas para os stakeholders:
 # 🟣 [RN3] - PERFIS
 # ---------------------------------------------------------------
 
-# Têm acesso Gestor/Administrador e Tesoureiro [D10].
+# Têm acesso Gestor e Tesoureiro.
